@@ -8,9 +8,25 @@ part 'note.freezed.dart';
 // But if Note was not serializable, we could skip it.
 part 'note.g.dart';
 
+const String tableNotes = "notes";
+
+class NoteFields {
+  static final List<String> values = [
+    /// Add all fields
+    id, title, desc, createAt, updateAt,
+  ];
+
+  static const String id = '_id';
+  static const String title = 'title';
+  static const String desc = 'desc';
+  static const String createAt = 'create_at';
+  static const String updateAt = 'update_at';
+}
+
 @freezed
 class Note with _$Note {
   const factory Note({
+    int? id,
     String? title,
     String? desc,
     @JsonKey(name: "create_at") String? createAt,

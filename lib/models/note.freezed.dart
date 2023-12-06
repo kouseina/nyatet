@@ -20,6 +20,7 @@ Note _$NoteFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Note {
+  int? get id => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get desc => throw _privateConstructorUsedError;
   @JsonKey(name: "create_at")
@@ -38,7 +39,8 @@ abstract class $NoteCopyWith<$Res> {
       _$NoteCopyWithImpl<$Res, Note>;
   @useResult
   $Res call(
-      {String? title,
+      {int? id,
+      String? title,
       String? desc,
       @JsonKey(name: "create_at") String? createAt,
       @JsonKey(name: "update_at") String? updateAt});
@@ -57,12 +59,17 @@ class _$NoteCopyWithImpl<$Res, $Val extends Note>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? title = freezed,
     Object? desc = freezed,
     Object? createAt = freezed,
     Object? updateAt = freezed,
   }) {
     return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -91,7 +98,8 @@ abstract class _$$NoteImplCopyWith<$Res> implements $NoteCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String? title,
+      {int? id,
+      String? title,
       String? desc,
       @JsonKey(name: "create_at") String? createAt,
       @JsonKey(name: "update_at") String? updateAt});
@@ -107,12 +115,17 @@ class __$$NoteImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? title = freezed,
     Object? desc = freezed,
     Object? createAt = freezed,
     Object? updateAt = freezed,
   }) {
     return _then(_$NoteImpl(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
       title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -137,7 +150,8 @@ class __$$NoteImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$NoteImpl with DiagnosticableTreeMixin implements _Note {
   const _$NoteImpl(
-      {this.title,
+      {this.id,
+      this.title,
       this.desc,
       @JsonKey(name: "create_at") this.createAt,
       @JsonKey(name: "update_at") this.updateAt});
@@ -145,6 +159,8 @@ class _$NoteImpl with DiagnosticableTreeMixin implements _Note {
   factory _$NoteImpl.fromJson(Map<String, dynamic> json) =>
       _$$NoteImplFromJson(json);
 
+  @override
+  final int? id;
   @override
   final String? title;
   @override
@@ -158,7 +174,7 @@ class _$NoteImpl with DiagnosticableTreeMixin implements _Note {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Note(title: $title, desc: $desc, createAt: $createAt, updateAt: $updateAt)';
+    return 'Note(id: $id, title: $title, desc: $desc, createAt: $createAt, updateAt: $updateAt)';
   }
 
   @override
@@ -166,6 +182,7 @@ class _$NoteImpl with DiagnosticableTreeMixin implements _Note {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'Note'))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('title', title))
       ..add(DiagnosticsProperty('desc', desc))
       ..add(DiagnosticsProperty('createAt', createAt))
@@ -177,6 +194,7 @@ class _$NoteImpl with DiagnosticableTreeMixin implements _Note {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$NoteImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.desc, desc) || other.desc == desc) &&
             (identical(other.createAt, createAt) ||
@@ -187,7 +205,8 @@ class _$NoteImpl with DiagnosticableTreeMixin implements _Note {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, title, desc, createAt, updateAt);
+  int get hashCode =>
+      Object.hash(runtimeType, id, title, desc, createAt, updateAt);
 
   @JsonKey(ignore: true)
   @override
@@ -205,13 +224,16 @@ class _$NoteImpl with DiagnosticableTreeMixin implements _Note {
 
 abstract class _Note implements Note {
   const factory _Note(
-      {final String? title,
+      {final int? id,
+      final String? title,
       final String? desc,
       @JsonKey(name: "create_at") final String? createAt,
       @JsonKey(name: "update_at") final String? updateAt}) = _$NoteImpl;
 
   factory _Note.fromJson(Map<String, dynamic> json) = _$NoteImpl.fromJson;
 
+  @override
+  int? get id;
   @override
   String? get title;
   @override

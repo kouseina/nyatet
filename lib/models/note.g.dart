@@ -7,6 +7,7 @@ part of 'note.dart';
 // **************************************************************************
 
 _$NoteImpl _$$NoteImplFromJson(Map<String, dynamic> json) => _$NoteImpl(
+      id: json['id'] as int?,
       title: json['title'] as String?,
       desc: json['desc'] as String?,
       createAt: json['create_at'] as String?,
@@ -15,6 +16,7 @@ _$NoteImpl _$$NoteImplFromJson(Map<String, dynamic> json) => _$NoteImpl(
 
 Map<String, dynamic> _$$NoteImplToJson(_$NoteImpl instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'title': instance.title,
       'desc': instance.desc,
       'create_at': instance.createAt,
