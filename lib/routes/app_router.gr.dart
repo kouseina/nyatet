@@ -21,10 +21,10 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const DetailPage(),
       );
     },
-    EditRoute.name: (routeData) {
+    AddRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const EditPage(),
+        child: const AddPage(),
       );
     },
     HomeRoute.name: (routeData) {
@@ -52,14 +52,14 @@ class DetailRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [EditPage]
-class EditRoute extends PageRouteInfo<void> {
-  const EditRoute({List<PageRouteInfo>? children})
+class AddRoute extends PageRouteInfo<void> {
+  const AddRoute({List<PageRouteInfo>? children})
       : super(
-          EditRoute.name,
+          AddRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'EditRoute';
+  static const String name = 'AddRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

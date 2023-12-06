@@ -16,7 +16,7 @@ class NoteFields {
     id, title, desc, createAt, updateAt,
   ];
 
-  static const String id = '_id';
+  static const String id = 'id';
   static const String title = 'title';
   static const String desc = 'desc';
   static const String createAt = 'create_at';

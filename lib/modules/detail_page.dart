@@ -34,7 +34,7 @@ class DetailPage extends StatelessWidget {
                     ),
                     SmallButtonWidget(
                       onTap: () {
-                        context.router.navigate(const EditRoute());
+                        context.router.navigate(const AddRoute());
                       },
                       iconData: Icons.edit,
                       iconSize: 22,

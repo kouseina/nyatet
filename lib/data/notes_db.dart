@@ -34,7 +34,7 @@ CREATE TABLE $tableNotes (
   ${NoteFields.title} $textType,
   ${NoteFields.desc} $textType,
   ${NoteFields.createAt} $textType,
-  ${NoteFields.updateAt} $textType,
+  ${NoteFields.updateAt} $textType
   )
 ''');
   }
@@ -66,7 +66,7 @@ CREATE TABLE $tableNotes (
   Future<List<Note>> readAllNotes() async {
     final db = await instance.database;
 
-    const orderBy = '${NoteFields.createAt} ASC';
+    const orderBy = '${NoteFields.updateAt} ASC';
     // final result =
     //     await db.rawQuery('SELECT * FROM $tableNotes ORDER BY $orderBy');
 

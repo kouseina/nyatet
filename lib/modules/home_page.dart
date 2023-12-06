@@ -1,13 +1,46 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:nyatet/data/notes_db.dart';
+import 'package:nyatet/models/note.dart';
 import 'package:nyatet/routes/app_router.dart';
 import 'package:nyatet/utils/app_colors.dart';
 import 'package:nyatet/widgets/small_button_widget.dart';
 
 @RoutePage()
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<Note> notes = [];
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    getNotes();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  void getNotes() async {
+    setState(() => isLoading = true);
+
+    notes = await NotesDatabase.instance.readAllNotes();
+
+    setState(() => isLoading = false);
+  }
 
   Color getBgCard(int index) {
     final colors = [
@@ -28,6 +61,16 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.white,
+        child: Icon(
+          Icons.add,
+          color: AppColors.black,
+        ),
+        onPressed: () {
+          context.navigateTo(const AddRoute());
+        },
+      ),
       backgroundColor: AppColors.black,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -60,8 +103,10 @@ class HomePage extends StatelessWidget {
                   crossAxisCount: 2,
                   mainAxisSpacing: 20,
                   crossAxisSpacing: 20,
-                  itemCount: 10,
+                  itemCount: notes.length,
                   itemBuilder: (context, index) {
+                    final item = notes[index];
+
                     return InkWell(
                       onTap: () {
                         context.router.navigate(const DetailRoute());
@@ -76,7 +121,7 @@ class HomePage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "How to make your personal brand stand out online and i think we need somthing just like how to make friend",
+                              item.title ?? "",
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge
@@ -89,7 +134,7 @@ class HomePage extends StatelessWidget {
                               height: 20,
                             ),
                             Text(
-                              "21 May 2023",
+                              item.updateAt ?? "",
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge
