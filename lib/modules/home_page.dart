@@ -48,51 +48,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Widget card({required Note item, required int index}) {
-      return GestureDetector(
-        onTap: () {
-          context.router.navigate(DetailRoute(note: item));
-        },
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: CardUtils.getBgCard(index),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                item.title ?? "",
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontSize: 18,
-                      color: AppColors.black,
-                    ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                DateTimeUtils.getDateFormat(item.updateAt ?? ""),
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppColors.black.withOpacity(0.6),
-                    ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    Widget dragCard({
-      GlobalKey? dragKey,
-      required Note item,
-      required int index,
-    }) {
-      final double width = MediaQuery.of(context).size.width / 2 - 30;
-
       return Container(
-        key: dragKey,
-        width: width,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: CardUtils.getBgCard(index),
@@ -118,6 +74,23 @@ class _HomePageState extends State<HomePage> {
                   ),
             ),
           ],
+        ),
+      );
+    }
+
+    Widget dragCard({
+      GlobalKey? dragKey,
+      required Note item,
+      required int index,
+    }) {
+      final double width = MediaQuery.of(context).size.width / 2 - 30;
+
+      return SizedBox(
+        key: dragKey,
+        width: width,
+        child: card(
+          item: item,
+          index: index,
         ),
       );
     }
@@ -244,7 +217,12 @@ class _HomePageState extends State<HomePage> {
                           onDragEnd: (details) {
                             setState(() => isDragging = false);
                           },
-                          child: card(item: item, index: index),
+                          child: GestureDetector(
+                            onTap: () {
+                              context.router.navigate(DetailRoute(note: item));
+                            },
+                            child: card(item: item, index: index),
+                          ),
                         );
                       },
                     );
