@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nyatet/routes/app_router.dart';
-import 'package:nyatet/utils/themes.dart';
+import 'package:nyatet/app/app_themes.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -10,9 +10,9 @@ class App extends StatelessWidget {
     final appRouter = AppRouter();
 
     return MaterialApp.router(
-      
+      debugShowCheckedModeBanner: false,
       routerConfig: appRouter.config(),
-      theme: Themes.lightTheme,
+      theme: AppThemes.lightTheme,
     );
   }
 }

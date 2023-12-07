@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nyatet/utils/app_colors.dart';
+import 'package:nyatet/app/app_colors.dart';
 
 class SmallButtonWidget extends StatelessWidget {
   const SmallButtonWidget({

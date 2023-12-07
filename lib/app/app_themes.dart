@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nyatet/utils/app_colors.dart';
+import 'package:nyatet/app/app_colors.dart';
 
-class Themes {
+class AppThemes {
   static ThemeData lightTheme = ThemeData.light().copyWith(
     primaryColor: AppColors.black,
     appBarTheme: AppBarTheme(

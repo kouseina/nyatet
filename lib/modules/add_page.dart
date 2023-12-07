@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nyatet/data/notes_db.dart';
 import 'package:nyatet/models/note.dart';
 import 'package:nyatet/routes/app_router.dart';
-import 'package:nyatet/utils/app_colors.dart';
+import 'package:nyatet/app/app_colors.dart';
 import 'package:nyatet/widgets/small_button_widget.dart';
 
 @RoutePage()

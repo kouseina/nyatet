@@ -4,7 +4,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:nyatet/data/notes_db.dart';
 import 'package:nyatet/models/note.dart';
 import 'package:nyatet/routes/app_router.dart';
-import 'package:nyatet/utils/app_colors.dart';
+import 'package:nyatet/app/app_colors.dart';
+import 'package:nyatet/utils/date_utils.dart';
 import 'package:nyatet/widgets/small_button_widget.dart';
 
 @RoutePage()
@@ -131,7 +132,7 @@ class _HomePageState extends State<HomePage> {
                               height: 20,
                             ),
                             Text(
-                              item.updateAt ?? "",
+                              DateTimeUtils.getDateFormat(item.updateAt ?? ""),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge

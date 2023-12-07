@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nyatet/models/note.dart';
 import 'package:nyatet/routes/app_router.dart';
-import 'package:nyatet/utils/app_colors.dart';
+import 'package:nyatet/app/app_colors.dart';
+import 'package:nyatet/utils/date_utils.dart';
 import 'package:nyatet/widgets/small_button_widget.dart';
 
 @RoutePage()
@@ -60,7 +60,7 @@ class _DetailPageState extends State<DetailPage> {
                   height: 20,
                 ),
                 Text(
-                  widget.note?.updateAt ?? "",
+                  DateTimeUtils.getDateFormat(widget.note?.updateAt ?? ""),
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge
