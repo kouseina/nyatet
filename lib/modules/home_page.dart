@@ -8,6 +8,7 @@ import 'package:nyatet/app/app_colors.dart';
 import 'package:nyatet/utils/card_utils.dart';
 import 'package:nyatet/utils/date_time_utils.dart';
 import 'package:nyatet/utils/dialog_utils.dart';
+import 'package:nyatet/widgets/card_widget.dart';
 import 'package:nyatet/widgets/small_button_widget.dart';
 
 @RoutePage()
@@ -47,40 +48,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget card({required Note item, required int index}) {
-      return Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: CardUtils.getBgCard(index),
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              item.title ?? "",
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontSize: 18,
-                    color: AppColors.black,
-                  ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              DateTimeUtils.getDateFormat(item.updateAt ?? ""),
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: AppColors.black.withOpacity(0.6),
-                  ),
-            ),
-          ],
-        ),
-      );
-    }
-
     Widget dragCard({
       GlobalKey? dragKey,
-      required Note item,
+      required Note note,
       required int index,
     }) {
       final double width = MediaQuery.of(context).size.width / 2 - 30;
@@ -88,8 +58,8 @@ class _HomePageState extends State<HomePage> {
       return SizedBox(
         key: dragKey,
         width: width,
-        child: card(
-          item: item,
+        child: CardWidget(
+          note: note,
           index: index,
         ),
       );
@@ -169,7 +139,9 @@ class _HomePageState extends State<HomePage> {
                         style: Theme.of(context).textTheme.displaySmall,
                       ),
                       SmallButtonWidget(
-                        onTap: () {},
+                        onTap: () {
+                          context.router.navigate(const SearchRoute());
+                        },
                         iconData: Icons.search,
                       )
                     ],
@@ -197,19 +169,19 @@ class _HomePageState extends State<HomePage> {
                       crossAxisSpacing: 20,
                       itemCount: notes.length,
                       itemBuilder: (context, index) {
-                        final item = notes[index];
+                        final note = notes[index];
 
                         return LongPressDraggable<Note>(
                           feedback: dragCard(
                             dragKey: _draggableKey,
-                            item: item,
+                            note: note,
                             index: index,
                           ),
-                          data: item,
+                          data: note,
                           dragAnchorStrategy: pointerDragAnchorStrategy,
                           childWhenDragging: Opacity(
                             opacity: 0.5,
-                            child: card(item: item, index: index),
+                            child: CardWidget(note: note, index: index),
                           ),
                           onDragStarted: () {
                             setState(() => isDragging = true);
@@ -219,9 +191,9 @@ class _HomePageState extends State<HomePage> {
                           },
                           child: GestureDetector(
                             onTap: () {
-                              context.router.navigate(DetailRoute(note: item));
+                              context.router.navigate(DetailRoute(note: note));
                             },
-                            child: card(item: item, index: index),
+                            child: CardWidget(note: note, index: index),
                           ),
                         );
                       },

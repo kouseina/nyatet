@@ -4,6 +4,7 @@ import 'package:nyatet/models/note.dart';
 import 'package:nyatet/modules/detail_page.dart';
 import 'package:nyatet/modules/add_page.dart';
 import 'package:nyatet/modules/home_page.dart';
+import 'package:nyatet/modules/search_page.dart';
 
 part 'app_router.gr.dart';
 
@@ -14,5 +15,6 @@ class AppRouter extends _$AppRouter {
         AutoRoute(page: HomeRoute.page, initial: true),
         AutoRoute(page: DetailRoute.page),
         AutoRoute(page: AddRoute.page),
+        AutoRoute(page: SearchRoute.page),
       ];
 }

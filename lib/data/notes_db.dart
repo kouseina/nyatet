@@ -74,6 +74,21 @@ CREATE TABLE $tableNotes (
     return result.map((json) => Note.fromJson(json)).toList();
   }
 
+  Future<List<Note>> searchNotes(String title) async {
+    final db = await instance.database;
+
+    const orderBy = '${NoteFields.updateAt} DESC';
+
+    final result = await db.query(
+      tableNotes,
+      orderBy: orderBy,
+      where: '${NoteFields.title} LIKE ?',
+      whereArgs: ["%$title%"],
+    );
+
+    return result.map((json) => Note.fromJson(json)).toList();
+  }
+
   Future<int> update(Note note) async {
     final db = await instance.database;
 
