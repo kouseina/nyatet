@@ -21,6 +21,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Note> notes = [];
   bool isLoading = false;
+  final GlobalKey _draggableKey = GlobalKey();
+  bool isDragging = false;
 
   @override
   void initState() {
@@ -37,18 +39,184 @@ class _HomePageState extends State<HomePage> {
     setState(() => isLoading = false);
   }
 
+  Future deleteNote(int id) async {
+    await NotesDatabase.instance.delete(id);
+
+    getNotes();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.white,
-        child: Icon(
-          Icons.add,
-          color: AppColors.black,
-        ),
-        onPressed: () {
-          context.navigateTo(AddRoute());
+    Widget card({required Note item, required int index}) {
+      return GestureDetector(
+        onTap: () {
+          context.router.navigate(DetailRoute(note: item));
         },
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: CardUtils.getBgCard(index),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.title ?? "",
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontSize: 18,
+                      color: AppColors.black,
+                    ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                DateTimeUtils.getDateFormat(item.updateAt ?? ""),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: AppColors.black.withOpacity(0.6),
+                    ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    Widget dragCard({
+      GlobalKey? dragKey,
+      required Note item,
+      required int index,
+    }) {
+      final double width = MediaQuery.of(context).size.width / 2 - 30;
+
+      return Container(
+        key: dragKey,
+        width: width,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: CardUtils.getBgCard(index),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              item.title ?? "",
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: 18,
+                    color: AppColors.black,
+                  ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              DateTimeUtils.getDateFormat(item.updateAt ?? ""),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: AppColors.black.withOpacity(0.6),
+                  ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Scaffold(
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(left: 30),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            const SizedBox(
+              width: 60,
+            ),
+            if (isDragging)
+              DragTarget<Note>(
+                builder: (context, candidateData, rejectedData) {
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 50),
+                    child: FloatingActionButton(
+                      backgroundColor: AppColors.red,
+                      child: Icon(
+                        Icons.delete,
+                        color: AppColors.white,
+                      ),
+                      onPressed: () {},
+                    ),
+                  );
+                },
+                onAccept: (data) {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => Dialog(
+                      backgroundColor: AppColors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Are you sure to delete this note?',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            const SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    context.router.pop();
+                                  },
+                                  child: Text(
+                                    'Cancel',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    if (data.id == null) return;
+
+                                    deleteNote(data.id!);
+                                    context.router.pop();
+                                  },
+                                  child: Text(
+                                    'Yes',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: AppColors.red,
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            FloatingActionButton(
+              backgroundColor: AppColors.white,
+              child: Icon(
+                Icons.add,
+                color: AppColors.black,
+              ),
+              onPressed: () {
+                context.navigateTo(AddRoute());
+              },
+            ),
+          ],
+        ),
       ),
       backgroundColor: AppColors.black,
       body: SafeArea(
@@ -79,58 +247,51 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 40,
                   ),
-                  MasonryGridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 20,
-                    itemCount: notes.length,
-                    itemBuilder: (context, index) {
-                      final item = notes[index];
-
-                      return InkWell(
-                        onTap: () {
-                          context.router.navigate(DetailRoute(note: item));
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: CardUtils.getBgCard(index),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item.title ?? "",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(
-                                      fontSize: 18,
-                                      color: AppColors.black,
-                                    ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                DateTimeUtils.getDateFormat(
-                                    item.updateAt ?? ""),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(
-                                      color: AppColors.black.withOpacity(0.6),
-                                    ),
-                              ),
-                            ],
+                  Builder(builder: (context) {
+                    if (isLoading) {
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height / 2,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.white,
                           ),
                         ),
                       );
-                    },
-                  ),
+                    }
+
+                    return MasonryGridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 20,
+                      crossAxisSpacing: 20,
+                      itemCount: notes.length,
+                      itemBuilder: (context, index) {
+                        final item = notes[index];
+
+                        return LongPressDraggable<Note>(
+                          feedback: dragCard(
+                            dragKey: _draggableKey,
+                            item: item,
+                            index: index,
+                          ),
+                          data: item,
+                          dragAnchorStrategy: pointerDragAnchorStrategy,
+                          childWhenDragging: Opacity(
+                            opacity: 0.5,
+                            child: card(item: item, index: index),
+                          ),
+                          onDragStarted: () {
+                            setState(() => isDragging = true);
+                          },
+                          onDragEnd: (details) {
+                            setState(() => isDragging = false);
+                          },
+                          child: card(item: item, index: index),
+                        );
+                      },
+                    );
+                  }),
                   const SizedBox(
                     height: 20,
                   ),
