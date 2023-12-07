@@ -1,4 +1,4 @@
-package com.example.nyatet
+package com.kouseina.nyatet
 
 import io.flutter.embedding.android.FlutterActivity
 
