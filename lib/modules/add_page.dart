@@ -8,7 +8,8 @@ import 'package:nyatet/widgets/small_button_widget.dart';
 
 @RoutePage()
 class AddPage extends StatefulWidget {
-  const AddPage({super.key});
+  const AddPage({super.key, this.note});
+  final Note? note;
 
   @override
   State<AddPage> createState() => _AddPageState();
@@ -23,8 +24,8 @@ class _AddPageState extends State<AddPage> {
   void initState() {
     super.initState();
 
-    titleController = TextEditingController();
-    descController = TextEditingController();
+    titleController = TextEditingController(text: widget.note?.title);
+    descController = TextEditingController(text: widget.note?.desc);
   }
 
   @override
@@ -35,11 +36,19 @@ class _AddPageState extends State<AddPage> {
     descController.dispose();
   }
 
-  Future addNote() async {
+  Future addOrUpdateNote() async {
     final isValid = _formKey.currentState!.validate();
 
     if (!isValid) return;
 
+    if (widget.note == null) {
+      await addNote();
+    } else {
+      await editNote();
+    }
+  }
+
+  Future addNote() async {
     final note = Note(
       title: titleController.text,
       desc: descController.text,
@@ -51,6 +60,22 @@ class _AddPageState extends State<AddPage> {
 
     if (!context.mounted) return;
     context.router.replace(const HomeRoute());
+  }
+
+  Future editNote() async {
+    final note = widget.note?.copyWith(
+      title: titleController.text,
+      desc: descController.text,
+      updateAt: DateTime.now().toIso8601String(),
+    );
+
+    if (note == null) return;
+
+    await NotesDatabase.instance.update(note);
+
+    if (!context.mounted) return;
+    context.router.replace(const HomeRoute());
+    context.router.navigate(DetailRoute(note: note));
   }
 
   @override
@@ -82,9 +107,7 @@ class _AddPageState extends State<AddPage> {
                       ),
                       SmallButtonWidget(
                         width: 74,
-                        onTap: () {
-                          addNote();
-                        },
+                        onTap: addOrUpdateNote,
                         text: "Save",
                       ),
                     ],

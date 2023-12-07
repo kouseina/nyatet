@@ -22,9 +22,11 @@ Note _$NoteFromJson(Map<String, dynamic> json) {
 mixin _$Note {
   int? get id => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
-  String? get desc => throw _privateConstructorUsedError;
+  String? get desc =>
+      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
   @JsonKey(name: "create_at")
-  String? get createAt => throw _privateConstructorUsedError;
+  String? get createAt =>
+      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
   @JsonKey(name: "update_at")
   String? get updateAt => throw _privateConstructorUsedError;
 
@@ -165,9 +167,11 @@ class _$NoteImpl with DiagnosticableTreeMixin implements _Note {
   final String? title;
   @override
   final String? desc;
+// ignore: invalid_annotation_target
   @override
   @JsonKey(name: "create_at")
   final String? createAt;
+// ignore: invalid_annotation_target
   @override
   @JsonKey(name: "update_at")
   final String? updateAt;
@@ -238,10 +242,10 @@ abstract class _Note implements Note {
   String? get title;
   @override
   String? get desc;
-  @override
+  @override // ignore: invalid_annotation_target
   @JsonKey(name: "create_at")
   String? get createAt;
-  @override
+  @override // ignore: invalid_annotation_target
   @JsonKey(name: "update_at")
   String? get updateAt;
   @override

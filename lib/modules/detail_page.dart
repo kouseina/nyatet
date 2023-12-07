@@ -42,7 +42,7 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                     SmallButtonWidget(
                       onTap: () {
-                        context.router.navigate(const AddRoute());
+                        context.router.navigate(AddRoute(note: widget.note));
                       },
                       iconData: Icons.edit,
                       iconSize: 22,

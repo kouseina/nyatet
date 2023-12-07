@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:nyatet/data/notes_db.dart';
@@ -28,11 +29,6 @@ class _HomePageState extends State<HomePage> {
     getNotes();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   void getNotes() async {
     setState(() => isLoading = true);
 
@@ -51,90 +47,95 @@ class _HomePageState extends State<HomePage> {
           color: AppColors.black,
         ),
         onPressed: () {
-          context.navigateTo(const AddRoute());
+          context.navigateTo(AddRoute());
         },
       ),
       backgroundColor: AppColors.black,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Nyatet",
-                      style: Theme.of(context).textTheme.displaySmall,
-                    ),
-                    SmallButtonWidget(
-                      onTap: () {},
-                      iconData: Icons.search,
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                MasonryGridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
-                  itemCount: notes.length,
-                  itemBuilder: (context, index) {
-                    final item = notes[index];
-
-                    return InkWell(
-                      onTap: () {
-                        context.router.navigate(DetailRoute(note: item));
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: CardUtils.getBgCard(index),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              item.title ?? "",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                    fontSize: 18,
-                                    color: AppColors.black,
-                                  ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              DateTimeUtils.getDateFormat(item.updateAt ?? ""),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
-                                    color: AppColors.black.withOpacity(0.6),
-                                  ),
-                            ),
-                          ],
-                        ),
+        child: RefreshIndicator(
+          onRefresh: () async => getNotes(),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Nyatet",
+                        style: Theme.of(context).textTheme.displaySmall,
                       ),
-                    );
-                  },
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
+                      SmallButtonWidget(
+                        onTap: () {},
+                        iconData: Icons.search,
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  MasonryGridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
+                    itemCount: notes.length,
+                    itemBuilder: (context, index) {
+                      final item = notes[index];
+
+                      return InkWell(
+                        onTap: () {
+                          context.router.navigate(DetailRoute(note: item));
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: CardUtils.getBgCard(index),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.title ?? "",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                      fontSize: 18,
+                                      color: AppColors.black,
+                                    ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                DateTimeUtils.getDateFormat(
+                                    item.updateAt ?? ""),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                      color: AppColors.black.withOpacity(0.6),
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
