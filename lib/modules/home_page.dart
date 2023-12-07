@@ -8,6 +8,7 @@ import 'package:nyatet/routes/app_router.dart';
 import 'package:nyatet/app/app_colors.dart';
 import 'package:nyatet/utils/card_utils.dart';
 import 'package:nyatet/utils/date_time_utils.dart';
+import 'package:nyatet/utils/dialog_utils.dart';
 import 'package:nyatet/widgets/small_button_widget.dart';
 
 @RoutePage()
@@ -148,60 +149,17 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
                 onAccept: (data) {
-                  showDialog<String>(
+                  DialogUtils.delete(
                     context: context,
-                    builder: (BuildContext context) => Dialog(
-                      backgroundColor: AppColors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Are you sure to delete this note?',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    context.router.pop();
-                                  },
-                                  child: Text(
-                                    'Cancel',
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    if (data.id == null) return;
+                    onCancel: () {
+                      context.router.pop();
+                    },
+                    onDelete: () {
+                      if (data.id == null) return;
 
-                                    deleteNote(data.id!);
-                                    context.router.pop();
-                                  },
-                                  child: Text(
-                                    'Yes',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                          color: AppColors.red,
-                                        ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                      deleteNote(data.id!);
+                      context.router.pop();
+                    },
                   );
                 },
               ),
