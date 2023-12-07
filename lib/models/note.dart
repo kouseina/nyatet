@@ -29,7 +29,9 @@ class Note with _$Note {
     int? id,
     String? title,
     String? desc,
+    // ignore: invalid_annotation_target
     @JsonKey(name: "create_at") String? createAt,
+    // ignore: invalid_annotation_target
     @JsonKey(name: "update_at") String? updateAt,
   }) = _Note;
 

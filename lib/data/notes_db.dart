@@ -1,7 +1,6 @@
 import 'package:nyatet/models/note.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/sqlite_api.dart';
 
 class NotesDatabase {
   static final NotesDatabase instance = NotesDatabase._instance();

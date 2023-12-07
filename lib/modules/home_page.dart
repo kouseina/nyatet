@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:nyatet/data/notes_db.dart';
@@ -22,7 +21,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     getNotes();
@@ -30,7 +28,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -109,7 +106,7 @@ class _HomePageState extends State<HomePage> {
 
                     return InkWell(
                       onTap: () {
-                        context.router.navigate(const DetailRoute());
+                        context.router.navigate(DetailRoute(note: item));
                       },
                       child: Container(
                         padding: const EdgeInsets.all(20),

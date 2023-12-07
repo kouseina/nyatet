@@ -21,7 +21,6 @@ class _AddPageState extends State<AddPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     titleController = TextEditingController();
@@ -30,7 +29,6 @@ class _AddPageState extends State<AddPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
 
     titleController.dispose();
@@ -51,6 +49,7 @@ class _AddPageState extends State<AddPage> {
 
     await NotesDatabase.instance.create(note);
 
+    if (!context.mounted) return;
     context.router.replace(const HomeRoute());
   }
 

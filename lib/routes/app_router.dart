@@ -1,4 +1,6 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
+import 'package:nyatet/models/note.dart';
 import 'package:nyatet/modules/detail_page.dart';
 import 'package:nyatet/modules/add_page.dart';
 import 'package:nyatet/modules/home_page.dart';

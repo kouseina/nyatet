@@ -1,13 +1,21 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:nyatet/models/note.dart';
 import 'package:nyatet/routes/app_router.dart';
 import 'package:nyatet/utils/app_colors.dart';
 import 'package:nyatet/widgets/small_button_widget.dart';
 
 @RoutePage()
-class DetailPage extends StatelessWidget {
-  const DetailPage({super.key});
+class DetailPage extends StatefulWidget {
+  const DetailPage({super.key, this.note});
+  final Note? note;
 
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,14 +53,14 @@ class DetailPage extends StatelessWidget {
                   height: 30,
                 ),
                 Text(
-                  "Beautiful weather app UI concept we wish existed",
+                  widget.note?.title ?? "",
                   style: Theme.of(context).textTheme.headlineLarge,
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 Text(
-                  "21 May, 2023",
+                  widget.note?.updateAt ?? "",
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge
@@ -62,7 +70,7 @@ class DetailPage extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  "ho would have thought there could be so many creative ways to tell the temperature? Today's daily dose of design inspiration is all about the weather. In this collection of UI designs, we're sharing a handful of beautiful mobile weather app concepts that we wish existed in real life.\n\n Weather apps are quite the popular interface theme for designers to explore. But don't let these effortlessly clean designs fool you. When it comes to the weather, there's a lot of data designers have to arrange which can be quite a challenge. Regardless, it's a great way to practice your UI skills. We",
+                  widget.note?.desc ?? "",
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge
